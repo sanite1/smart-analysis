@@ -28,7 +28,7 @@ const Notes = () => {
                 variant="h5"
                 sx={{marginBottom: "30px", fontWeight: "700", fontSize: "36px"}}
             >
-                Here are some notes
+                Here are some notes for you.
             </Typography>
             <Box>
                 <PartyCards />
