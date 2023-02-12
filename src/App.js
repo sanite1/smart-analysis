@@ -4,6 +4,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import ProtectedRoutes from "./Pages/ProtectedRoutes";
 import ErrorPage from "./Pages/ErrorPage";
+import Signup from "./Pages/Signup";
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
             <Router>
                 <Routes>
                   <Route exact path="/login" element={<Login/>} />
+                  <Route exact path="/signup" element={<Signup />} />
                   <Route element={<ProtectedRoutes />}>
 
                       <Route exact path="/home/:menu" element={<Home/>} />

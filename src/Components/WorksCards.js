@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box"
-import { Grid, AppBar, Toolbar, Typography, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Button, SwipeableDrawer, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
-import { Fragment, useState } from "react";
+import {  Typography, Button, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { useState } from "react";
 
-import PartyCards from "../Components/PartyCards";
+// import PartyCards from "../Components/PartyCards";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import RelatedWorksData from "../Data/data";
 

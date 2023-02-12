@@ -1,17 +1,31 @@
-import { Grid, AppBar, Toolbar, Typography, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Button } from "@mui/material";
+import { Grid, Typography, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from "@mui/material";
 import Box from "@mui/material/Box"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+
+import { useForm, Controller } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const Login = () => {
 
+    const schema = yup.object().shape({
+        email: yup.string().required("Email Is Required"),
+        password: yup
+        .string()
+        .required("Password Is Required")
+        
+    });
+
+    const { handleSubmit, trigger, control } = useForm({
+        resolver: yupResolver(schema),
+    });
     const [values, setValues] = useState({
-        email: '',
-        password: '',
         showPassword: false,
     });
 
@@ -21,20 +35,10 @@ const Login = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const [data, setData] = useState(false); 
-    
-    // useEffect(() => { 
-    //     localStorage.setItem('dataKey', JSON.stringify(data)); 
-    // }, [data]);
-
     function handleLoadClick() {
         setLoading(true);
         localStorage.setItem('loggedIn', JSON.stringify(true)); 
         navigate("/home/dashboard")
-    }
-    function handleLogoutClick() {
-        localStorage.setItem('loggedIn', JSON.stringify(false)); 
-        // navigate("/home/dashboard")
     }
 
     const handleClickShowPassword = () => {
@@ -52,14 +56,15 @@ const Login = () => {
         <Box
             sx={{
                 height: "100vh",
-                // background: "black",
-                // width: 1000
             }}
         >
             
             <Grid container >
-                <Grid item md={5} xs={12}
+                <Box item md={5} xs={12}
                     sx={{
+                        position: "fixed",
+                        left: 0,
+                        width: "40vw",
                         boxShadow: "0 0 5px 0 gray",
                         textAlign: "center",
                         height: "100vh",
@@ -106,27 +111,32 @@ const Login = () => {
                     >
                         Hi, Welcome back
                     </Typography>
-                    <img 
-                        src="./images/login.png" alt="img" 
-                        style={{
-                            width: "fit-content"
+                    <Box
+                        sx={{
+                            margin: "auto",
+                            width: "90%",
                         }}
-                    />
-                </Grid>
-                <Grid item md={7} xs={12}
+                    >
+                        <img
+                            src="./images/login.png" alt="img"
+                            style={{
+                                width: "100%"
+                            }}
+                        />
+                    </Box>
+                </Box>
+                <Box item md={7} xs={12}
                     sx={{
-                        // width: {xs: "80%", md: "60%"},
+                        width: {xs: "80%", md: "60%"},
+                        marginLeft: {xs: "0", md: "40%"},
                         textAlign: "center",
-                        // height: "100vh",
                         marginTop: {xs: "20px", md: "15vh"}
                     }}
                 >
                     <Box 
                         sx={{
-                            
                             margin: "auto",
                             width: {xs: "80%", md: "60%"},
-                            // background: "pink"
                         }}
                     >
                         <Typography 
@@ -142,34 +152,70 @@ const Login = () => {
                         >
                             Sign in to Smart Analysis
                         </Typography>
-                        <p style={{textAlign: "left", marginBottom: 30, fontFamily: "monospace",}}>Don't have an account? <a href="/">Get Started</a> <Link style={{decoration: "none", color: "black"}} to={"/home/dashboard"}>Back to home</Link></p>
+                        <p style={{textAlign: "left", marginBottom: 30, color: "black", fontFamily: "monospace",}}>Don't have an account? <Link style={{decoration: "none", color: "teal"}} to={"/signup"}>Get Started</Link></p>
                     
 
                         <form action="">
-                            <TextField id="outlined-basic" label="Email Address" variant="outlined" fullWidth sx={{marginBottom: "30px"}} />
 
-                            <FormControl fullWidth sx={{marginBottom: "30px"}} variant="outlined">
-                                <InputLabel fullWidth htmlFor="outlined-adornment-password">Password</InputLabel>
-                                <OutlinedInput fullWidth
-                                    id="outlined-adornment-password"
-                                    type={values.showPassword ? 'text' : 'password'}
-                                    value={values.password}
-                                    onChange={(e)=> setValues({password: e.target.value})}
-                                    endAdornment={
-                                    <InputAdornment fullWidth position="end">
-                                        <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                        >
-                                        {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                    }
-                                    label="Password"
-                                />
-                            </FormControl>
+                        <Controller
+                                name="email"
+                                control={control}
+                                defaultValue=""
+                                render={({
+                                    field: { ref, ...fields },
+                                    fieldState: { error },
+                                }) => (
+                                    <TextField
+                                    variant="outlined"
+                                    sx={{marginBottom: "30px"}}
+                                    label="Email"
+                                    fullWidth
+                                    {...fields}
+                                    inputRef={ref}
+                                    error={Boolean(error?.message)}
+                                    helperText={error?.message}
+                                    onKeyUp={() => {
+                                        trigger("email");
+                                    }}
+                                    />
+                                )}
+                            />
+                            
+                            <Controller
+                                name="password"
+                                control={control}
+                                defaultValue=""
+                                render={({
+                                    field: { ref, ...fields },
+                                    fieldState: { error },
+                                }) => (
+                                    <TextField
+                                        variant="outlined"
+                                        sx={{marginBottom: "30px"}}
+                                        label="Password"
+                                        fullWidth
+                                        {...fields}
+                                        type={values.showPassword ? "text" : "password"}
+                                        InputProps={{
+                                            endAdornment: (
+                                            <IconButton onClick={handleClickShowPassword}>
+                                                {values.showPassword === true ? (
+                                                <Visibility />
+                                                ) : (
+                                                <VisibilityOff />
+                                                )}
+                                            </IconButton>
+                                            ),
+                                        }}
+                                        inputRef={ref}
+                                        error={Boolean(error?.message)}
+                                        helperText={error?.message}
+                                        onKeyUp={() => {
+                                            trigger("password");
+                                        }}
+                                    />
+                                )}
+                            />
 
                             <Typography 
                                 variant="p" 
@@ -182,13 +228,13 @@ const Login = () => {
                                     marginBottom: "30px"
                                 }}
                             >
-                                Forgot Password?
+                                <Link style={{decoration: "none", color: "teal"}} to={"/signup"}>Forgot Password?</Link>
                             </Typography>
 
                             <LoadingButton
                                 fullWidth
                                 size="small"
-                                onClick={handleLoadClick}
+                                onClick={handleSubmit(handleLoadClick)}
                                 endIcon={<SendIcon />}
                                 loading={loading}
                                 loadingPosition="end"
@@ -207,7 +253,7 @@ const Login = () => {
                         </form>
 
                     </Box>
-                </Grid>
+                </Box>
             </Grid>
         </Box>
     );

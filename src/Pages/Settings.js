@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box"
-import { Grid, AppBar, Toolbar, Typography, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Button, SwipeableDrawer } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Typography, } from "@mui/material";
+// import { Fragment, useState } from "react";
 
 import AccountView from "../Components/AccountView";
 
@@ -20,7 +20,7 @@ const Styles = () => {
 
 const Settings = () => {
 
-    const styles = Styles();
+    // const styles = Styles();
 
     return (
         <Box>

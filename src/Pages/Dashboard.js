@@ -1,13 +1,13 @@
 import Box from "@mui/material/Box"
-import { Grid, AppBar, Toolbar, Typography, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Button, SwipeableDrawer } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Typography,  } from "@mui/material";
+import { useState } from "react";
 
 import PartyCards from "../Components/PartyCards";
 import BarChart from "../Components/BarChart";
-import RelatedWorksData from "../Data/data";
+// import RelatedWorksData from "../Data/data";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import PieChart from "../Components/PieChart";
-import LineChart from "../Components/LineChart";
+// import PieChart from "../Components/PieChart";
+// import LineChart from "../Components/LineChart";
 
 const Styles = () => {
     return {
@@ -33,45 +33,50 @@ const Dashboard = () => {
 
     const styles = Styles();
 
-    const [ barData, setBarData ] = useState({
-        labels: RelatedWorksData.map((data) => data.year),
-        datasets: [{
-            label: "Works",
-            data: RelatedWorksData.map((data) => data.test),
-            backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e", "#778eb8", "#a04a5e"],
-            
-        },
-        {
-            label: "ygbiuyhg",
-            data: RelatedWorksData.map((data) => data.test-20),
-            // backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e", "#778eb8", "#a04a5e"],
-            
-        }]
-    })
-    const [ pieData, setPieData ] = useState({
+    const [ barData,  ] = useState({
         labels: ["APC", "PDP", "LP"],
         datasets: [{
-            label: "Works",
-            data: [200, 150, 400],
-            backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e"],
-            
-        }]
-    })
-    const [ lineData, setLineData ] = useState({
-        labels: RelatedWorksData.map((data) => data.year),
-        datasets: [{
-            label: "Works",
-            data: RelatedWorksData.map((data) => data.test),
-            backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e", "#778eb8", "#a04a5e"],
+            label: "Positive",
+            data: [20, 30, 90],
+            backgroundColor: ["#061b64"],
             
         },
         {
-            label: "ygbiuyhg",
-            data: RelatedWorksData.map((data) => data.test-20),
-            // backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e", "#778eb8", "#a04a5e"],
+            label: "Negetive",
+            data: [80, 60, 10],
+            backgroundColor: ["#7a0c2e"],
+        },
+        {
+            label: "Neutral",
+            data: [40, 50, 20],
+            backgroundColor: ["#7a4f01"],
             
         }]
     })
+    // const [ pieData, setPieData ] = useState({
+    //     labels: ["APC", "PDP", "LP"],
+    //     datasets: [{
+    //         label: "Works",
+    //         data: [200, 150, 400],
+    //         backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e"],
+            
+    //     }]
+    // })
+    // const [ lineData, setLineData ] = useState({
+    //     labels: RelatedWorksData.map((data) => data.year),
+    //     datasets: [{
+    //         label: "Works",
+    //         data: RelatedWorksData.map((data) => data.test),
+    //         backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e", "#778eb8", "#a04a5e"],
+            
+    //     },
+    //     {
+    //         label: "ygbiuyhg",
+    //         data: RelatedWorksData.map((data) => data.test-20),
+    //         // backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e", "#778eb8", "#a04a5e"],
+            
+    //     }]
+    // })
 
     return (
         <Box>
@@ -86,80 +91,7 @@ const Dashboard = () => {
             </Box>
             <Box>
                 <Grid2 container spacing={2} sx={styles.bt} >
-                    <Typography
-                        variant="h5"
-                        sx={{marginBottom: "0px", fontWeight: "700", fontSize: "30px", width: "100%"}}
-                    >
-                        Eastern States
-                    </Typography>
-                    <Grid2 item xs={12} md={7} sx={{padding: {xs: "15px 6px", md: "15px"}}} >
-                        <Box sx={[styles.barchart, styles.chart]}>
-                            <BarChart chartData={barData} axis={"y"} />
-                        </Box>
-                    </Grid2>
-                    <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
-                        <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
-                        </Box>
-
-                    </Grid2>
-                    <Typography
-                        variant="h5"
-                        sx={{marginBottom: "0px", fontWeight: "700", fontSize: "30px", width: "100%"}}
-                    >
-                        Sounthern States
-                    </Typography>
-                    <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
-                        <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
-                        </Box>
-
-                    </Grid2>
-                    <Grid2 item xs={12} md={7} sx={{padding: {xs: "15px 6px", md: "15px"}}} >
-                        <Box sx={[styles.barchart, styles.chart]}>
-                            <BarChart chartData={barData} axis={"y"} />
-                        </Box>
-                    </Grid2>
-                    <Typography
-                        variant="h5"
-                        sx={{marginBottom: "0px", fontWeight: "700", fontSize: "30px", width: "100%"}}
-                    >
-                        Northern States
-                    </Typography>
-                    <Grid2 item xs={12} md={7} sx={{padding: {xs: "15px 6px", md: "15px"}}} >
-                        <Box sx={[styles.barchart, styles.chart]}>
-                            <BarChart chartData={barData} axis={"y"} />
-                        </Box>
-                    </Grid2>
-                    <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
-                        <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
-                        </Box>
-
-                    </Grid2>
-                    <Typography
-                        variant="h5"
-                        sx={{marginBottom: "0px", fontWeight: "700", fontSize: "30px", width: "100%"}}
-                    >
-                        Western States
-                    </Typography>
-                    <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
-                        <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
-                        </Box>
-
-                    </Grid2>
-                    <Grid2 item xs={12} md={7} sx={{padding: {xs: "15px 6px", md: "15px"}}} >
-                        <Box sx={[styles.barchart, styles.chart]}>
-                            <BarChart chartData={barData} axis={"y"} />
-                        </Box>
-                    </Grid2>
-                    {/* <Grid2 item xs={12} md={12} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
-                        <Box sx={[styles.piechart, styles.chart]}>
-                            <LineChart chartData={lineData} ratio={2} axis={"x"} />
-                        </Box>
-
-                    </Grid2> */}
+                    
                     <Typography
                         variant="h5"
                         sx={{marginBottom: "0px", fontWeight: "700", fontSize: "30px", width: "100%"}}
@@ -168,7 +100,7 @@ const Dashboard = () => {
                     </Typography>
                     <Grid2 item xs={12} md={12} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
                         <Box sx={[styles.piechart, styles.chart]}>
-                            <BarChart chartData={lineData} axis={"x"} ratio={2} />
+                            <BarChart chartData={barData} axis={"x"} ratio={2} />
                         </Box>
 
                     </Grid2>

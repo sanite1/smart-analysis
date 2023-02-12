@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box"
-import { Grid, AppBar, Toolbar, Typography, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Button, SwipeableDrawer } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Typography, } from "@mui/material";
+// import { Fragment, useState } from "react";
 import RelatedWorksData from "../Data/data";
 import WorksCards from "../Components/WorksCards";
 
@@ -20,7 +20,7 @@ const Styles = () => {
 
 const RelatedWorks = () => {
 
-    const styles = Styles();
+    // const styles = Styles();
 
     console.log(RelatedWorksData);
 

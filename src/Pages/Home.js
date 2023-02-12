@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box"
-import {  AppBar, Toolbar, Typography, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Button, SwipeableDrawer } from "@mui/material";
+import {  AppBar, Toolbar, Typography, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Button, SwipeableDrawer, IconButton } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from "react-router-dom"
 import { Fragment, useState } from "react";
 import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
@@ -7,13 +7,19 @@ import BookIcon from '@mui/icons-material/Book';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MenuIcon from '@mui/icons-material/Menu';
-import FlagIcon from '@mui/icons-material/Flag';
+// import FlagIcon from '@mui/icons-material/Flag';
 import Dashboard from "./Dashboard";
 import Settings from "./Settings";
 import Notes from "./Notes";
 import ErrorPage from "./ErrorPage";
 import RelatedWorks from "./RelatedWorks";
 import LayersIcon from '@mui/icons-material/Layers';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Apc from "./Apc";
+import Pdp from "./Pdp";
+import Lp from "./Lp";
+// import ShowChartIcon from '@mui/icons-material/ShowChart';
+import EqualizerIcon from '@mui/icons-material/Equalizer';
 // import Dashboard from './Pages/Dashboard';
 
 const Home = () => {
@@ -25,6 +31,7 @@ const Home = () => {
     console.log(params);
 
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [expand, setExpand] = useState(false);
 
     const [state, setState] = useState({
         top: false,
@@ -49,6 +56,10 @@ const Home = () => {
         setSelectedIndex(index);
         navigate(`/home/${val}`);
         toggleDrawer("left", false);
+    };
+    const handleExpand = () => {
+        setExpand(!expand);
+        
     };
     function handleLogoutClick() {
         localStorage.setItem('loggedIn', JSON.stringify(false)); 
@@ -84,7 +95,7 @@ const Home = () => {
             <Avatar sx={{ bgcolor: "purple" }}>CS</Avatar>
             <Typography variant="p" sx={{fontFamily: "sans-serif"}}>Collins Sanni</Typography>
         </Box>
-
+        
         <Box sx={{ width: '100%', fontSize: "20px", }} onClick={toggleDrawer("left", false)} onKeyDown={toggleDrawer("left", false)}>
             <List component="nav" aria-label="main mailbox folders">
                 <ListItemButton
@@ -96,7 +107,50 @@ const Home = () => {
                         <StackedBarChartIcon sx={{fontSize: '20px'}}/>
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" primaryTypographyProps={selectedIndex === 0 ? {fontSize: '14px', fontWeight: 600} : {fontSize: '14px', fontWeight: 550, color: "gray"}}/>
+                    <IconButton edge="end" aria-label="delete" onClick={handleExpand}>
+                      <ExpandMoreIcon />
+                    </IconButton>
                 </ListItemButton>
+                <Box
+                    sx={{ padding: 0, paddingLeft: "20px", borderRadius: "6px", display: expand ? "block" : "none" }}
+                    // selected={selectedIndex === 0}
+                    // onClick={(event) => handleListItemClick("dashboard", 0)}
+                >
+                    <List component="nav" aria-label="main mailbox folders">
+                            <ListItemButton
+                                sx={{ borderRadius: "6px" }}
+                                selected={selectedIndex === 5}
+                                onClick={(event) => handleListItemClick("apc", 5)}
+                            >
+                                <ListItemIcon sx={{fontSize: '14px'}}>
+                                    <EqualizerIcon sx={{fontSize: '20px'}}/>
+                                </ListItemIcon>
+                                <ListItemText primary="APC" primaryTypographyProps={selectedIndex === 5 ? {fontSize: '14px', fontWeight: 600} : {fontSize: '14px', fontWeight: 550, color: "gray"}}/>
+                            </ListItemButton>
+                            <ListItemButton
+                                sx={{ borderRadius: "6px" }}
+                                selected={selectedIndex === 6}
+                                onClick={(event) => handleListItemClick("pdp", 6)}
+                            >
+                                <ListItemIcon sx={{fontSize: '14px'}}>
+                                    <EqualizerIcon sx={{fontSize: '20px'}}/>
+                                </ListItemIcon>
+                                <ListItemText primary="PDP" primaryTypographyProps={selectedIndex === 6 ? {fontSize: '14px', fontWeight: 600} : {fontSize: '14px', fontWeight: 550, color: "gray"}}/>
+                            </ListItemButton>
+                            <ListItemButton
+                                sx={{ borderRadius: "6px" }}
+                                selected={selectedIndex === 7}
+                                onClick={(event) => handleListItemClick("lp", 7)}
+                            >
+                                <ListItemIcon sx={{fontSize: '14px'}}>
+                                    <EqualizerIcon sx={{fontSize: '20px'}}/>
+                                </ListItemIcon>
+                                <ListItemText primary="LP" primaryTypographyProps={selectedIndex === 7 ? {fontSize: '14px', fontWeight: 600} : {fontSize: '14px', fontWeight: 550, color: "gray"}}/>
+                            </ListItemButton>
+                            
+                        </List>
+                </Box>
+                
                 <ListItemButton
                     sx={{ borderRadius: "6px" }}
                     selected={selectedIndex === 1}
@@ -151,10 +205,16 @@ const Home = () => {
         params = params.menu
         if(params === "dashboard"){
             return <Dashboard />
+        }else if(params === "apc"){
+            return <Apc />
+        }else if(params === "pdp"){
+            return <Pdp />
+        }else if(params === "lp"){
+            return <Lp />
         }else if(params === "notes"){
             return <Notes />
         }else if(params === "settings"){
-            return <Settings     />
+            return <Settings />
         }else if(params === "logout"){
             // return <Dashboard />
         }else if(params === "related-works"){
