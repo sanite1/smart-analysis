@@ -1,4 +1,4 @@
-import { Grid, Typography, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from "@mui/material";
+import { Grid, Typography, TextField, IconButton, Snackbar, Alert } from "@mui/material";
 import Box from "@mui/material/Box"
 import { useState } from "react";
 import Visibility from '@mui/icons-material/Visibility';
@@ -11,11 +11,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import api from "../api/api";
 
 const Login = () => {
 
     const schema = yup.object().shape({
-        email: yup.string().required("Email Is Required"),
+        username: yup.string().required("Email Is Required"),
         password: yup
         .string()
         .required("Password Is Required")
@@ -26,8 +27,21 @@ const Login = () => {
         resolver: yupResolver(schema),
     });
     const [values, setValues] = useState({
+        vertical: "bottom",
+        horizontal: "center",
+        open: false,
         showPassword: false,
     });
+    const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [messageSnackBar, setMessageSnackBar] = useState("");
+
+    const handleSnackBar = () => {
+        setOpenSnackBar(true);
+      };
+
+    // const handleClose = () => {
+    //     setValues({ ...values, open: false });
+    //   };
 
     const navigate = useNavigate()
 
@@ -35,10 +49,34 @@ const Login = () => {
 
     const [loading, setLoading] = useState(false);
 
-    function handleLoadClick() {
+    const handleLoadClick = async (data) => {
+        console.log(data);
         setLoading(true);
-        localStorage.setItem('loggedIn', JSON.stringify(true)); 
-        navigate("/home/dashboard")
+        try {
+            const response = await api.post("/login", data)
+            if (response.data?.success === false) {
+                setMessageSnackBar("Error occured. Check internet and try again.")
+                handleSnackBar()
+                setLoading(false)
+            } else {
+                localStorage.setItem('loggedIn', JSON.stringify(true)); 
+                localStorage.setItem('user', JSON.stringify(response.data.user)); 
+                navigate("/home/dashboard")
+
+            }
+        } catch(err) {
+            if(err.response) {
+                setLoading(false)
+                if(err.response.status === 401) {
+                    setMessageSnackBar("Username or password incorrect!")
+                    handleSnackBar()
+                } else {
+                    setMessageSnackBar("Error occured. Check internet and try again.")
+                    handleSnackBar()
+                }
+                // console.log("Error: " + err.response);
+            }
+        }
     }
 
     const handleClickShowPassword = () => {
@@ -48,9 +86,9 @@ const Login = () => {
         });
     };
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+    // const handleMouseDownPassword = (event) => {
+    //     event.preventDefault();
+    // };
 
     return (
         <Box
@@ -59,6 +97,11 @@ const Login = () => {
             }}
         >
             
+            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={() => setOpenSnackBar(false)}>
+                <Alert onClose={() => setOpenSnackBar(false)} severity="error" sx={{ width: '100%' }}>
+                    {messageSnackBar}
+                </Alert>
+            </Snackbar>
             <Grid container >
                 <Box item md={5} xs={12}
                     sx={{
@@ -127,10 +170,10 @@ const Login = () => {
                 </Box>
                 <Box item md={7} xs={12}
                     sx={{
-                        width: {xs: "80%", md: "60%"},
+                        width: {xs: "100%", md: "60%"},
                         marginLeft: {xs: "0", md: "40%"},
                         textAlign: "center",
-                        marginTop: {xs: "20px", md: "15vh"}
+                        marginTop: {xs: "15vh", md: "15vh"}
                     }}
                 >
                     <Box 
@@ -148,6 +191,7 @@ const Login = () => {
                                 marginTop: 6,
                                 fontWeight: 600,
                                 fontFamily: "monospace",
+                                fontSize: {xs: "30px", md: "60%"},
                             }}
                         >
                             Sign in to Smart Analysis
@@ -158,7 +202,7 @@ const Login = () => {
                         <form action="">
 
                         <Controller
-                                name="email"
+                                name="username"
                                 control={control}
                                 defaultValue=""
                                 render={({
@@ -175,7 +219,7 @@ const Login = () => {
                                     error={Boolean(error?.message)}
                                     helperText={error?.message}
                                     onKeyUp={() => {
-                                        trigger("email");
+                                        trigger("username");
                                     }}
                                     />
                                 )}

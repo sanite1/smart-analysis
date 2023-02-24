@@ -1,17 +1,19 @@
 
 import Box from "@mui/material/Box"
-import { Typography, Avatar, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from "@mui/material";
-import { useState } from "react";
-// import { border, width } from "@mui/system";
-// import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-// import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
-// import PaymentsIcon from '@mui/icons-material/Payments';
+import { Typography, Avatar, TextField, IconButton, Snackbar, Alert } from "@mui/material";
+import { useEffect, useState } from "react";
 import PersonIcon from '@mui/icons-material/Person';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
+import { useForm, Controller } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import api from "../api/api";
+// import { useNavigate } from "react-router-dom";
+
 
 
 const Styles = () => {
@@ -79,28 +81,38 @@ const AccountView = () => {
 
     const styles = Styles();
 
-    const date = new Date();
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
 
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
+    const schema = yup.object().shape({
+        firstName: yup.string().required("Firstname Is Required"),
+        lastName: yup.string().required("Lastname Is Required"),
+        country: yup.string().required("Country is Required"),
+        state: yup.string().required("State is Required"),
+        username: yup.string().required("Email Is Required"),
+        phoneNumber: yup.string().required("Phone Number Is Required"),
+        password: yup
+        .string()
+        .required("Password Is Required"),
+    });
+
+    const { handleSubmit, trigger, control, } = useForm({
+        resolver: yupResolver(schema),
+    });
 
     const [values, setValues] = useState({
-        fname: 'Collins',
-        lname: 'Sanni',
-        email: 'csanni52@gmail.com',
-        phone: '09071423222',
-        country: 'Nigeria',
-        state: 'Lagos',
-        password: '0000',
+        fname: JSON.parse(localStorage.user).firstName,
+        lname: JSON.parse(localStorage.user).lastName,
+        username: JSON.parse(localStorage.user).username,
+        phone: JSON.parse(localStorage.user).phoneNumber,
+        country: JSON.parse(localStorage.user).country,
+        state: JSON.parse(localStorage.user).state,
+        password: JSON.parse(localStorage.user).password,
         showPassword: false,
     });
 
     const [loading, setLoading] = useState(false);
-
-    function handleLoadClick() {
-        setLoading(true);
-    }
 
     const handleClickShowPassword = () => {
         setValues({
@@ -109,12 +121,52 @@ const AccountView = () => {
         });
     };
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
+    // const navigate = useNavigate()
+
+    
+    const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [messageSnackBar, setMessageSnackBar] = useState("");
+    const handleSnackBar = () => {
+        setOpenSnackBar(true);
     };
+
+    const handleLoadClick = async (data) => {
+        setLoading(true);
+        try {
+            const response = await api.patch("/update", data)
+            console.log(data)
+            console.log(response)
+            if (response.data?.success === false){
+                setMessageSnackBar("Error occured. Check internet and try again.")
+                handleSnackBar()
+                setLoading(false)
+            } else {
+                localStorage.setItem('user', JSON.stringify(response.data.user)); 
+                setLoading(false)
+                window.location.reload()
+            }
+        } catch(err) {
+            if(err.response) {
+                setLoading(false)
+                if(err.response.status === 401) {
+                    setMessageSnackBar("Password incorrect!")
+                    handleSnackBar()
+                } else {
+                    setMessageSnackBar("Error occured. Check internet and try again.")
+                    handleSnackBar()
+                }
+                // console.log("Error: " + err.response);
+            }
+        }
+    }
 
     return (
         <Grid2 container columnGap={3} rowGap={3} sx={{background: ""}}>
+            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={() => setOpenSnackBar(false)}>
+                <Alert onClose={() => setOpenSnackBar(false)} severity="error" sx={{ width: '100%' }}>
+                    {messageSnackBar}
+                </Alert>
+            </Snackbar>
             <Grid2 item xs={12} sm={6} md={3.5}
                 
             >
@@ -128,13 +180,13 @@ const AccountView = () => {
                         variant="h5"
                         sx={[styles.bigText, {color: ""}]}
                     >
-                        Sanni Collins
+                        {`${JSON.parse(localStorage.user).lastName} ${JSON.parse(localStorage.user).firstName}`}
                     </Typography>
                     <Typography
                         variant="p"
                         sx={[styles.sec2Txt, {fontSize: "13px", textAlign: "center", color: "gray"}]}
                     >
-                        Date created: { `${day} - ${month} - ${year}` }
+                        Date created: { JSON.parse(localStorage.user).dateCreated }
                     </Typography>
                 </Box>
             </Grid2>
@@ -161,46 +213,192 @@ const AccountView = () => {
                 </Box>
                 <Grid2 container spacing={2} sx={[styles.textFieldSection]}>
                     <Grid2 item xs={12} md={6}>
-                        <TextField id="outlined-basic" label="First name" variant="outlined" value={values.fname} onChange={(e)=> setValues({fname: e.target.value})} fullWidth sx={{marginBottom: {xs: "10px", md: "30px"} }} />
+                        <Controller
+                            name="firstName"
+                            control={control}
+                            defaultValue={values.fname}
+                            render={({
+                                field: { ref, ...fields },
+                                fieldState: { error },
+                            }) => (
+                                <TextField
+                                variant="outlined"
+                                sx={{marginBottom: "30px"}}
+                                label="First Name"
+                                fullWidth
+                                {...fields}
+                                inputRef={ref}
+                                error={Boolean(error?.message)}
+                                helperText={error?.message}
+                                onKeyUp={() => {
+                                    trigger("firstName");
+                                }}
+                                />
+                            )}
+                        />
                     </Grid2>
                     <Grid2 item xs={12} md={6}>
-                        <TextField id="outlined-basic" label="Last name" variant="outlined" value={values.lname} onChange={(e)=> setValues({lname: e.target.value})} fullWidth sx={{marginBottom: {xs: "10px", md: "30px"} }} />
+                        <Controller
+                            name="lastName"
+                            control={control}
+                            defaultValue={values.lname}
+                            render={({
+                                field: { ref, ...fields },
+                                fieldState: { error },
+                            }) => (
+                                <TextField
+                                variant="outlined"
+                                sx={{marginBottom: "30px"}}
+                                label="Last Name"
+                                fullWidth
+                                {...fields}
+                                inputRef={ref}
+                                error={Boolean(error?.message)}
+                                helperText={error?.message}
+                                onKeyUp={() => {
+                                    trigger("lasstName");
+                                }}
+                                />
+                            )}
+                        />
                     </Grid2>
                     <Grid2 item xs={12} md={6}>
-                        <TextField id="outlined-basic" label="Email Address" variant="outlined" value={values.email} onChange={(e)=> setValues({email: e.target.value})} fullWidth sx={{marginBottom: {xs: "10px", md: "30px"} }} />
+                        <Controller
+                            name="username"
+                            control={control}
+                            defaultValue={values.username}
+                            render={({
+                                field: { ref, ...fields },
+                                fieldState: { error },
+                            }) => (
+                                <TextField
+                                disabled
+                                variant="outlined"
+                                sx={{marginBottom: "30px"}}
+                                label="Email"
+                                fullWidth
+                                {...fields}
+                                inputRef={ref}
+                                error={Boolean(error?.message)}
+                                helperText={error?.message}
+                                onKeyUp={() => {
+                                    trigger("username");
+                                }}
+                                />
+                            )}
+                        />
                     </Grid2>
                     <Grid2 item xs={12} md={6}>
-                        <TextField id="outlined-basic" label="Phone number" variant="outlined" value={values.phone} onChange={(e)=> setValues({phone: e.target.value})} fullWidth sx={{marginBottom: {xs: "10px", md: "30px"} }} />
+                        <Controller
+                            name="phoneNumber"
+                            control={control}
+                            defaultValue={values.phone}
+                            render={({
+                                field: { ref, ...fields },
+                                fieldState: { error },
+                            }) => (
+                                <TextField
+                                variant="outlined"
+                                sx={{marginBottom: "30px"}}
+                                label="Phone Number"
+                                fullWidth
+                                {...fields}
+                                inputRef={ref}
+                                error={Boolean(error?.message)}
+                                helperText={error?.message}
+                                onKeyUp={() => {
+                                    trigger("phoneNumber");
+                                }}
+                                />
+                            )}
+                        />
                     </Grid2>
                     <Grid2 item xs={12} md={6}>
-                        <TextField id="outlined-basic" label="Country" variant="outlined" value={values.country} onChange={(e)=> setValues({country: e.target.value})} fullWidth sx={{marginBottom: {xs: "10px", md: "30px"} }} />
+                        <Controller
+                            name="country"
+                            control={control}
+                            defaultValue={values.country}
+                            render={({
+                                field: { ref, ...fields },
+                                fieldState: { error },
+                            }) => (
+                                <TextField
+                                variant="outlined"
+                                sx={{marginBottom: "30px"}}
+                                label="Country"
+                                fullWidth
+                                {...fields}
+                                inputRef={ref}
+                                error={Boolean(error?.message)}
+                                helperText={error?.message}
+                                onKeyUp={() => {
+                                    trigger("country");
+                                }}
+                                />
+                            )}
+                        />
                     </Grid2>
                     <Grid2 item xs={12} md={6}>
-                        <TextField id="outlined-basic" label="State" variant="outlined" value={values.state} onChange={(e)=> setValues({state: e.target.value})} fullWidth sx={{marginBottom: {xs: "10px", md: "30px"} }} />
+                        <Controller
+                            name="state"
+                            control={control}
+                            defaultValue={values.state}
+                            render={({
+                                field: { ref, ...fields },
+                                fieldState: { error },
+                            }) => (
+                                <TextField
+                                variant="outlined"
+                                sx={{marginBottom: "30px"}}
+                                label="State"
+                                fullWidth
+                                {...fields}
+                                inputRef={ref}
+                                error={Boolean(error?.message)}
+                                helperText={error?.message}
+                                onKeyUp={() => {
+                                    trigger("state");
+                                }}
+                                />
+                            )}
+                        />
                     </Grid2>
                     <Grid2 item xs={12} md={6}>
-                        <FormControl fullWidth sx={{marginBottom: "30px"}} variant="outlined">
-                            <InputLabel fullWidth htmlFor="outlined-adornment-password">Password</InputLabel>
-                            <OutlinedInput fullWidth
-                                id="outlined-adornment-password"
-                                type={values.showPassword ? 'text' : 'password'}
-                                value={values.password}
-                                onChange={(e)=> setValues({password: e.target.value})}
-                                endAdornment={
-                                <InputAdornment fullWidth position="end">
-                                    <IconButton
-                                    aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
-                                    onMouseDown={handleMouseDownPassword}
-                                    edge="end"
-                                    >
-                                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                                }
-                                label="Password"
-                            />
-                        </FormControl>
+                        <Controller
+                            name="password"
+                            control={control}
+                            defaultValue=""
+                            render={({
+                                field: { ref, ...fields },
+                                fieldState: { error },
+                            }) => (
+                                <TextField
+                                    variant="outlined"
+                                    sx={{marginBottom: "30px"}}
+                                    label="Password"
+                                    fullWidth
+                                    {...fields}
+                                    type={values.showPassword ? "text" : "password"}
+                                    InputProps={{
+                                        endAdornment: (
+                                        <IconButton onClick={handleClickShowPassword}>
+                                            {values.showPassword === true ? (
+                                            <Visibility />
+                                            ) : (
+                                            <VisibilityOff />
+                                            )}
+                                        </IconButton>
+                                        ),
+                                    }}
+                                    inputRef={ref}
+                                    error={Boolean(error?.message)}
+                                    helperText={error?.message}
+                                    onKeyUp={() => {
+                                        trigger("password");
+                                    }}
+                                />
+                            )}
+                        />
                     </Grid2>
                 </Grid2>
                 <Box
@@ -210,7 +408,7 @@ const AccountView = () => {
                         <LoadingButton
                             fullWidth
                             size="small"
-                            onClick={handleLoadClick}
+                            onClick={handleSubmit(handleLoadClick)}
                             endIcon={<SaveAltIcon />}
                             loading={loading}
                             loadingPosition="end"

@@ -4,19 +4,19 @@ import { Typography, } from "@mui/material";
 
 import PartyCards from "../Components/PartyCards";
 
-const Styles = () => {
-    return {
-        apc: {
-            background: "#d1e9fc"
-        },
-        pdp: {
-            background: "#fff7cd"
-        },
-        lp: {
-            background: "#ffe7d9"
-        },
-    }
-}
+// const Styles = () => {
+//     return {
+//         apc: {
+//             background: "#d1e9fc"
+//         },
+//         pdp: {
+//             background: "#fff7cd"
+//         },
+//         lp: {
+//             background: "#ffe7d9"
+//         },
+//     }
+// }
 
 const Notes = () => {
 

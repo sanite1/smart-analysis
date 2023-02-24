@@ -1,4 +1,4 @@
-import { Grid, Typography, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton,  } from "@mui/material";
+import { Grid, Typography, TextField, IconButton, Snackbar, Alert,  } from "@mui/material";
 import Box from "@mui/material/Box"
 import { useState } from "react";
 import Visibility from '@mui/icons-material/Visibility';
@@ -6,7 +6,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import { Link, useNavigate } from "react-router-dom";
-// import api from "../api/api";
+import api from "../api/api";
 
 
 import { useForm, Controller } from "react-hook-form";
@@ -15,14 +15,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const Login = () => {
 
-    // const { control, handleSubmit } = useForm();
-
     const schema = yup.object().shape({
         firstName: yup.string().required("Firstname Is Required"),
         lastName: yup.string().required("Lastname Is Required"),
         country: yup.string().required("Country is Required"),
         state: yup.string().required("State is Required"),
-        email: yup.string().required("Email Is Required"),
+        username: yup.string().required("Email Is Required"),
         phoneNumber: yup.string().required("Phone Number Is Required"),
         password: yup
         .string()
@@ -42,7 +40,7 @@ const Login = () => {
         ),
     });
 
-    const { handleSubmit, trigger, control } = useForm({
+    const { handleSubmit, trigger, control, reset } = useForm({
         resolver: yupResolver(schema),
     });
 
@@ -57,10 +55,51 @@ const Login = () => {
 
     const [loading, setLoading] = useState(false);
 
-    function handleLoadClick() {
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [messageSnackBar, setMessageSnackBar] = useState("");
+    const handleSnackBar = () => {
+        setOpenSnackBar(true);
+    };
+
+    const handleLoadClick = async (data) => {
+        console.log(data);
+        data = {
+            ...data,
+            dateCreated: `${day} - ${month} - ${year}`
+        }
+        console.log(data);
         setLoading(true);
-        localStorage.setItem('loggedIn', JSON.stringify(true)); 
-        navigate("/home/dashboard")
+        try {
+            const response = await api.post("/register", data)
+            if (response.data?.exists === true){
+                setMessageSnackBar("Email address already in use.")
+                handleSnackBar()
+                setLoading(false)
+                reset()
+            }
+            if (response.data?.success === false){
+                setMessageSnackBar(response.data.message.message)
+                handleSnackBar()
+                setLoading(false)
+            } else {
+                localStorage.setItem('loggedIn', JSON.stringify(true)); 
+                localStorage.setItem('user', JSON.stringify(response.data.user)); 
+                navigate("/login")
+
+            }
+        } catch(err) {
+            if(err.response) {
+                setLoading(false)
+                setMessageSnackBar("Error occured. Check internet and try again.")
+                handleSnackBar()
+            }
+        }
     }
 
     const handleClickShowPassword = () => {
@@ -71,9 +110,7 @@ const Login = () => {
         // console.log(values)
     };
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+    
 
     return (
         <Box
@@ -81,6 +118,11 @@ const Login = () => {
                 height: "100vh",
             }}
         >
+            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={() => setOpenSnackBar(false)}>
+                <Alert onClose={() => setOpenSnackBar(false)} severity="error" sx={{ width: '100%' }}>
+                    {messageSnackBar}
+                </Alert>
+            </Snackbar>
             <Grid container >
                 <Box item md={5} xs={12}
                     sx={{
@@ -150,7 +192,7 @@ const Login = () => {
                 </Box>
                 <Box item md={7} xs={12}
                     sx={{
-                        width: {xs: "80%", md: "60%"},
+                        width: {xs: "100%", md: "60%"},
                         marginLeft: {xs: "0", md: "40%"},
                         textAlign: "center",
                         marginTop: {xs: "20px", md: "15vh"}
@@ -174,7 +216,7 @@ const Login = () => {
                                 fontFamily: "monospace",
                             }}
                         >
-                            Sign in to Smart Analysis
+                            Sign up to Smart Analysis
                         </Typography>
                         <p style={{textAlign: "left", marginBottom: 30, color: "black", fontFamily: "monospace",}}>Already have an account? <Link style={{decoration: "none", color: "teal"}} to={"/login"}>Sign in</Link></p>
                     
@@ -228,7 +270,7 @@ const Login = () => {
                                 )}
                             />
                             <Controller
-                                name="email"
+                                name="username"
                                 control={control}
                                 defaultValue=""
                                 render={({
@@ -245,7 +287,7 @@ const Login = () => {
                                     error={Boolean(error?.message)}
                                     helperText={error?.message}
                                     onKeyUp={() => {
-                                        trigger("email");
+                                        trigger("username");
                                     }}
                                     />
                                 )}

@@ -1,8 +1,6 @@
 
 import Box from "@mui/material/Box"
 import { Grid, Typography, } from "@mui/material";
-// import { Fragment, useState } from "react";
-// import { border, width } from "@mui/system";
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import PaymentsIcon from '@mui/icons-material/Payments';

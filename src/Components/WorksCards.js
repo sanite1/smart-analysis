@@ -2,7 +2,6 @@ import Box from "@mui/material/Box"
 import {  Typography, Button, Tooltip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import { useState } from "react";
 
-// import PartyCards from "../Components/PartyCards";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import RelatedWorksData from "../Data/data";
 

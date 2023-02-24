@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box"
 import {  AppBar, Toolbar, Typography, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Button, SwipeableDrawer, IconButton } from "@mui/material";
-import { BrowserRouter as Router, Route, Routes, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Fragment, useState } from "react";
 import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
 import BookIcon from '@mui/icons-material/Book';
@@ -60,13 +60,12 @@ const Home = () => {
     const handleExpand = () => {
         setExpand(!expand);
         
+        toggleDrawer("left", true);
     };
     function handleLogoutClick() {
         localStorage.setItem('loggedIn', JSON.stringify(false)); 
         navigate("/login")
     }
-
-    
 
     const menu = <Box
         sx={{
@@ -92,8 +91,10 @@ const Home = () => {
                 // boxShadow: "rgb(145 158 171 / 20%) 0px 0px 2px 0px, rgb(145 158 171 / 12%) 0px 12px 24px -4px",
             }}
         >
-            <Avatar sx={{ bgcolor: "purple" }}>CS</Avatar>
-            <Typography variant="p" sx={{fontFamily: "sans-serif"}}>Collins Sanni</Typography>
+            <Avatar sx={{ bgcolor: "purple" }}>{`${JSON.parse(localStorage.user).lastName[0]}${JSON.parse(localStorage.user).firstName[0]}`}</Avatar>
+            <Typography variant="p" sx={{fontFamily: "sans-serif"}}>
+                {`${JSON.parse(localStorage.user).lastName} ${JSON.parse(localStorage.user).firstName}`}
+            </Typography>
         </Box>
         
         <Box sx={{ width: '100%', fontSize: "20px", }} onClick={toggleDrawer("left", false)} onKeyDown={toggleDrawer("left", false)}>
@@ -319,7 +320,7 @@ const Home = () => {
                                     <Box sx={{display: {xs: "flex", md: "flex"}}}>
                                         {/* <FlagIcon sx={{color: "black"}}/> */}
                                         
-                                        <Avatar sx={{ bgcolor: "purple" }}>CS</Avatar>
+                                        <Avatar sx={{ bgcolor: "purple" }}>{`${JSON.parse(localStorage.user).lastName[0]}${JSON.parse(localStorage.user).firstName[0]}`}</Avatar>
 
                                         {/* <Typography sx={{color: "blue"}}>Wooooooooow</Typography> */}
                                         

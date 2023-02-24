@@ -4,7 +4,6 @@ import { useState } from "react";
 
 // import PartyCards from "../Components/PartyCards";
 import BarChart from "../Components/BarChart";
-import RelatedWorksData from "../Data/data";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import PieChart from "../Components/PieChart";
 // import LineChart from "../Components/LineChart";

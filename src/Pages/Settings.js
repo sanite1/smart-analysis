@@ -4,19 +4,19 @@ import { Typography, } from "@mui/material";
 
 import AccountView from "../Components/AccountView";
 
-const Styles = () => {
-    return {
-        apc: {
-            background: "#d1e9fc"
-        },
-        pdp: {
-            background: "#fff7cd"
-        },
-        lp: {
-            background: "#ffe7d9"
-        },
-    }
-}
+// const Styles = () => {
+//     return {
+//         apc: {
+//             background: "#d1e9fc"
+//         },
+//         pdp: {
+//             background: "#fff7cd"
+//         },
+//         lp: {
+//             background: "#ffe7d9"
+//         },
+//     }
+// }
 
 const Settings = () => {
 
