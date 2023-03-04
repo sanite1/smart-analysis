@@ -1,8 +1,14 @@
 import { Box, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 
 const ErrorPage = ({home}) => {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []); 
+
     return (
         <Box
             sx={{

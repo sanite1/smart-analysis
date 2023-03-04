@@ -3,6 +3,7 @@ import { Typography, } from "@mui/material";
 // import { Fragment, useState } from "react";
 
 import AccountView from "../Components/AccountView";
+import { useEffect } from "react";
 
 // const Styles = () => {
 //     return {
@@ -21,6 +22,10 @@ import AccountView from "../Components/AccountView";
 const Settings = () => {
 
     // const styles = Styles();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
 
     return (
         <Box>

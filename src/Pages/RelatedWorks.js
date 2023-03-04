@@ -3,6 +3,7 @@ import { Typography, } from "@mui/material";
 // import { Fragment, useState } from "react";
 // import RelatedWorksData from "../Data/data";
 import WorksCards from "../Components/WorksCards";
+import { useEffect } from "react";
 
 // const Styles = () => {
 //     return {
@@ -21,6 +22,10 @@ import WorksCards from "../Components/WorksCards";
 const RelatedWorks = () => {
 
     // const styles = Styles();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
 
 
     return (

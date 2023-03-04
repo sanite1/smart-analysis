@@ -1,12 +1,13 @@
 import Box from "@mui/material/Box"
-import {  Typography, Stepper, Step, StepLabel } from "@mui/material";
-import { useState } from "react";
+import {  Typography, Stepper, Step, StepLabel, useMediaQuery } from "@mui/material";
+import { useEffect, useState } from "react";
 
 // import PartyCards from "../Components/PartyCards";
 import BarChart from "../Components/BarChart";
 // import RelatedWorksData from "../Data/data";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import PieChart from "../Components/PieChart";
+import LineChart from "../Components/LineChart";
 // import LineChart from "../Components/LineChart";
 
 const Styles = () => {
@@ -62,22 +63,37 @@ const Pdp = () => {
 
     const styles = Styles();
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+    
+      const isLargeScreen = useMediaQuery('(min-width: 1024px)');
+  
+      const ratio = isLargeScreen ? 2 : 1;
+
     const northcentral = {
         labels: ["Benue", "Kogi", "Kwara", "Nassarawa", "Niger", "Plateau", "FCT"],
         datasets: [{
             label: "Positive",
-            data: [20, 30, 90, 58, 11, 30, 10],
+            data: [260.316, 267.523, 270.628, 251.545, 265.578, 250.047, 243.840, ],
             backgroundColor: ["#061b64"],
         },
         {
             label: "Negetive",
-            data: [80, 30, 60, 10, 23, 95, 40],
+            data: [116.028, 140.144, 139.150, 143.477, 138.116, 142.655, 122.323, ],
             backgroundColor: ["#7a0c2e"],
         },
-        {
-            label: "Neutral",
-            data: [40, 50, 20, 30, 48, 60, 50],
-            backgroundColor: ["#7a4f01"],
+        ]
+    }
+    const northcentralpie = {
+        labels: ["Positive", "Negetive"],
+        datasets: [{
+            label: "Works",
+            data: [
+                [260.316, 267.523, 270.628, 251.545, 265.578, 250.047, 243.840].reduce((accumulator, currentValue) => accumulator + currentValue),
+                [116.028, 140.144, 139.150, 143.477, 138.116, 142.655, 122.323, ].reduce((accumulator, currentValue) => accumulator + currentValue),
+            ],
+            backgroundColor: ["#061b64", "#7a0c2e"],
             
         }]
     }
@@ -85,18 +101,25 @@ const Pdp = () => {
         labels: ["Adamawa", "Bauchi", "Borno", "Gombe", "Taraba", "Yobe"],
         datasets: [{
             label: "Positive",
-            data: [20, 30, 30, 90, 58, 11],
+            data: [260.916, 262.022, 289.998, 253.805, 235.365, 264.412, ],
             backgroundColor: ["#061b64"],
         },
         {
             label: "Negetive",
-            data: [80, 60, 10, 23, 95, 30],
+            data: [106.840, 109.699, 107.477, 133.012, 156.793, 123.664, ],
             backgroundColor: ["#7a0c2e"],
         },
-        {
-            label: "Neutral",
-            data: [40, 50, 20, 48, 60, 30],
-            backgroundColor: ["#7a4f01"],
+        ]
+    }
+    const northEastpie = {
+        labels: ["Positive", "Negetive"],
+        datasets: [{
+            label: "Works",
+            data: [
+                [260.916, 262.022, 289.998, 253.805, 235.365, 264.412,].reduce((accumulator, currentValue) => accumulator + currentValue),
+                [106.840, 109.699, 107.477, 133.012, 156.793, 123.664,].reduce((accumulator, currentValue) => accumulator + currentValue),
+            ],
+            backgroundColor: ["#061b64", "#7a0c2e"],
             
         }]
     }
@@ -104,18 +127,25 @@ const Pdp = () => {
         labels: ["Jigawa", "Kaduna", "Kano", "Kastina", "Kebbi", "Sokoto", "Zamfara"],
         datasets: [{
             label: "Positive",
-            data: [20, 30, 90, 58, 11, 90, 20],
+            data: [280.783, 249.766, 281.440, 285.874, 273.559, 269.856, 256.972, ],
             backgroundColor: ["#061b64"],
         },
         {
             label: "Negetive",
-            data: [80, 90, 60, 10, 23, 95, 14],
+            data: [111.656, 136.307, 112.426, 103.749, 117.287, 116.584, 123.726, ],
             backgroundColor: ["#7a0c2e"],
         },
-        {
-            label: "Neutral",
-            data: [90, 40, 50, 20, 48, 60, 47],
-            backgroundColor: ["#7a4f01"],
+        ]
+    }
+    const northWestpie = {
+        labels: ["Positive", "Negetive"],
+        datasets: [{
+            label: "Works",
+            data: [
+                [280.783, 249.766, 281.440, 285.874, 273.559, 269.856, 256.972].reduce((accumulator, currentValue) => accumulator + currentValue),
+                [111.656, 136.307, 112.426, 103.749, 117.287, 116.584, 123.726].reduce((accumulator, currentValue) => accumulator + currentValue),
+            ],
+            backgroundColor: ["#061b64", "#7a0c2e"],
             
         }]
     }
@@ -123,18 +153,25 @@ const Pdp = () => {
         labels: ["Ekiti", "Lagos", "Ogun", "Ondo", "Osun", "Oyo"],
         datasets: [{
             label: "Positive",
-            data: [20, 30, 90, 58, 11, 90],
+            data: [237.892, 256.014, 254.844, 249.815, 251.302, 251.807, ],
             backgroundColor: ["#061b64"],
         },
         {
             label: "Negetive",
-            data: [80, 60, 10, 90, 23, 95],
+            data: [154.200, 143.570, 143.766, 144.867, 143.780, 141.302, ],
             backgroundColor: ["#7a0c2e"],
         },
-        {
-            label: "Neutral",
-            data: [40, 50, 20, 40, 48, 60],
-            backgroundColor: ["#7a4f01"],
+        ]
+    }
+    const southWestpie = {
+        labels: ["Positive", "Negetive"],
+        datasets: [{
+            label: "Works",
+            data: [
+                [237.892, 256.014, 254.844, 249.815, 251.302, 251.807, ].reduce((accumulator, currentValue) => accumulator + currentValue),
+                [154.200, 143.570, 143.766, 144.867, 143.780, 141.302,].reduce((accumulator, currentValue) => accumulator + currentValue),
+            ],
+            backgroundColor: ["#061b64", "#7a0c2e"],
             
         }]
     }
@@ -142,18 +179,25 @@ const Pdp = () => {
         labels: ["Akwa-Ibom", "Bayelsa", "Cross-River", "Delta", "Edo", "Rivers"],
         datasets: [{
             label: "Positive",
-            data: [20, 30, 90, 58, 11, 90],
+            data: [263.988, 263.881, 246.578, 248.328, 237.467, 245.305, ],
             backgroundColor: ["#061b64"],
         },
         {
             label: "Negetive",
-            data: [80, 60, 10, 90, 23, 95],
+            data: [115.014, 114.296, 140.744, 140.275, 149.125, 151.075, ],
             backgroundColor: ["#7a0c2e"],
         },
-        {
-            label: "Neutral",
-            data: [40, 50, 20, 40, 48, 60],
-            backgroundColor: ["#7a4f01"],
+        ]
+    }
+    const southSouthpie = {
+        labels: ["Positive", "Negetive"],
+        datasets: [{
+            label: "Works",
+            data: [
+                [263.988, 263.881, 246.578, 248.328, 237.467, 245.305].reduce((accumulator, currentValue) => accumulator + currentValue),
+                [115.014, 114.296, 140.744, 140.275, 149.125, 151.075].reduce((accumulator, currentValue) => accumulator + currentValue),
+            ],
+            backgroundColor: ["#061b64", "#7a0c2e"],
             
         }]
     }
@@ -161,45 +205,46 @@ const Pdp = () => {
         labels: ["Abia", "Anambra", "Ebonyi", "Enugu", "Imo"],
         datasets: [{
             label: "Positive",
-            data: [20, 30, 90, 58, 11],
+            data: [281.408, 261.469, 243.272, 231.105, 229.068, ],
             backgroundColor: ["#061b64"],
         },
         {
             label: "Negetive",
-            data: [80, 60, 90, 23, 95],
+            data: [198.365, 120.908, 145.281, 165.135, 155.768, ],
             backgroundColor: ["#7a0c2e"],
         },
-        {
-            label: "Neutral",
-            data: [50, 20, 40, 48, 60],
-            backgroundColor: ["#7a4f01"],
+        ]
+    }
+    const southEastpie = {
+        labels: ["Positive", "Negetive"],
+        datasets: [{
+            label: "Works",
+            data: [
+                [281.408, 261.469, 243.272, 231.105, 229.068].reduce((accumulator, currentValue) => accumulator + currentValue),
+                [198.365, 120.908, 145.281, 165.135, 155.768].reduce((accumulator, currentValue) => accumulator + currentValue),
+            ],
+            backgroundColor: ["#061b64", "#7a0c2e"],
             
         }]
     }
-    const [ pieData, ] = useState({
-        labels: ["Abia", "Anambra", "Ebonyi", "Enugu", "Imo"],
+    const [ lineData,  ] = useState({
+        labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ],
         datasets: [{
-            label: "Works",
-            data: [200, 150, 400, 393, 843],
-            backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e"],
+            label: "Positve",
+            data: [260.316, 267.523, 270.628, 251.545, 265.578, 250.047, 243.840, 260.916, 262.022, 289.998, 253.805, 235.365, 264.412, 280.783, 249.766, 281.440, 285.874, 273.559, 269.856, 256.972, 237.892, 256.014, 254.844, 249.815, 251.302, 251.807, 263.988, 263.881, 246.578, 248.328, 237.467, 245.305, 281.408, 261.469, 243.272, 231.105, 229.068, ],
+            backgroundColor: ["#061b64"],
+            
+        },
+        {
+            label: "Negetive",
+            data: [116.028, 140.144, 139.150, 143.477, 138.116, 142.655, 122.323, 106.840, 109.699, 107.477, 133.012, 156.793, 123.664, 111.656, 136.307, 112.426, 103.749, 117.287, 116.584, 123.726, 154.200, 143.570, 143.766, 144.867, 143.780, 141.302, 115.014, 114.296, 140.744, 140.275, 149.125, 151.075, 198.365, 120.908, 145.281, 165.135, 155.768, ],
+            backgroundColor: ["#7a0c2e"],
+            background: "#7a0c2e",
+            color: "#7a0c2e",
             
         }]
     })
-    // const [ lineData, setLineData ] = useState({
-    //     labels: RelatedWorksData.map((data) => data.year),
-    //     datasets: [{
-    //         label: "Works",
-    //         data: RelatedWorksData.map((data) => data.test),
-    //         backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e", "#778eb8", "#a04a5e"],
-            
-    //     },
-    //     {
-    //         label: "ygbiuyhg",
-    //         data: RelatedWorksData.map((data) => data.test-20),
-    //         // backgroundColor: ["#061b64", "#7a4f01", "#7a0c2e", "#778eb8", "#a04a5e"],
-            
-    //     }]
-    // })
+
 
     return (
         <Box>
@@ -215,7 +260,7 @@ const Pdp = () => {
                         <Box
                             sx={[styles.displayParties, {paddingRight: {xs: 0, md: "15px"}}, ]}
                         >
-                            <Box sx={[styles.ap]}>
+                            <Box sx={[styles.ap, {marginBottom: "20px", }]}>
                                 <Box
                                     sx={styles.icon}
                                 >
@@ -242,7 +287,7 @@ const Pdp = () => {
                         </Typography>
                     </Grid2>
                     <Grid2 item xs={12} md={4}>
-                        <Box sx={{display: "flex", justifyContent: "space-evenly"}}>
+                        <Box sx={{marginTop: "20px",display: "flex", justifyContent: "space-evenly"}}>
                             <Box>
                                 <Stepper activeStep={3} orientation="vertical">
                                     {["pdp", "atiku", "abubakar"].map((step, index) => (
@@ -290,7 +335,7 @@ const Pdp = () => {
                     </Grid2>
                     <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
                         <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
+                            <PieChart chartData={northcentralpie}  />
                         </Box>
 
                     </Grid2>
@@ -302,7 +347,7 @@ const Pdp = () => {
                     </Typography>
                     <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
                         <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
+                            <PieChart chartData={northEastpie}  />
                         </Box>
 
                     </Grid2>
@@ -324,7 +369,7 @@ const Pdp = () => {
                     </Grid2>
                     <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
                         <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
+                            <PieChart chartData={northWestpie}  />
                         </Box>
 
                     </Grid2>
@@ -336,7 +381,7 @@ const Pdp = () => {
                     </Typography>
                     <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
                         <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
+                            <PieChart chartData={southEastpie}  />
                         </Box>
 
                     </Grid2>
@@ -358,7 +403,7 @@ const Pdp = () => {
                     </Grid2>
                     <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
                         <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
+                            <PieChart chartData={southWestpie}  />
                         </Box>
 
                     </Grid2>
@@ -370,7 +415,7 @@ const Pdp = () => {
                     </Typography>
                     <Grid2 item xs={12} md={5} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
                         <Box sx={[styles.piechart, styles.chart]}>
-                            <PieChart chartData={pieData}  />
+                            <PieChart chartData={southSouthpie}  />
                         </Box>
 
                     </Grid2>
@@ -380,8 +425,25 @@ const Pdp = () => {
                         </Box>
                     </Grid2>
                 </Grid2>
-            </Box>
+                <Box>
+                    <Grid2 container spacing={2} sx={styles.bt} >
+                        
+                        <Typography
+                            variant="h5"
+                            sx={{marginBottom: "0px", fontWeight: "700", fontSize: "30px", width: "100%"}}
+                        >
+                            Change in sentiment across of all states
+                        </Typography>
+                        <Grid2 item xs={12} md={12} sx={{padding: {xs: "15px 6px", md: "15px"}}}>
+                            <Box sx={[styles.piechart, styles.chart]}>
+                                <LineChart chartData={lineData} axis={"x"} ratio={ratio} />
+                            </Box>
 
+                        </Grid2>
+                    </Grid2>
+                </Box>
+            </Box>
+            
         </Box>
     );
 }

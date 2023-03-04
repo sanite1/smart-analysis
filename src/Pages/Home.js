@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box"
 import {  AppBar, Toolbar, Typography, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Button, SwipeableDrawer, IconButton } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom"
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
 import BookIcon from '@mui/icons-material/Book';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -26,11 +26,15 @@ const Home = () => {
 
     let navigate = useNavigate();
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
     let params = useParams();
 
     console.log(params);
 
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedIndex, setSelectedIndex] = useState(params.menu === "dashboard" ? 0 : params.menu === "notes" ? 1 : params.menu === "related-works" ? 2 : params.menu === "settings" ? 3 : params.menu === "apc" ? 5 : params.menu === "pdp" ? 6 : params.menu === "lp" ? 7 : 0 );
     const [expand, setExpand] = useState(false);
 
     const [state, setState] = useState({
@@ -57,7 +61,8 @@ const Home = () => {
         navigate(`/home/${val}`);
         toggleDrawer("left", false);
     };
-    const handleExpand = () => {
+    const handleExpand = (event) => {
+        event.stopPropagation();
         setExpand(!expand);
         
         toggleDrawer("left", true);
@@ -109,7 +114,7 @@ const Home = () => {
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" primaryTypographyProps={selectedIndex === 0 ? {fontSize: '14px', fontWeight: 600} : {fontSize: '14px', fontWeight: 550, color: "gray"}}/>
                     <IconButton edge="end" aria-label="delete" onClick={handleExpand}>
-                      <ExpandMoreIcon />
+                      <ExpandMoreIcon  />
                     </IconButton>
                 </ListItemButton>
                 <Box

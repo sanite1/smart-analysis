@@ -1,6 +1,6 @@
 import { Grid, Typography, TextField, IconButton, Snackbar, Alert,  } from "@mui/material";
 import Box from "@mui/material/Box"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoadingButton from '@mui/lab/LoadingButton/LoadingButton';
@@ -14,6 +14,10 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const Login = () => {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
 
     const schema = yup.object().shape({
         firstName: yup.string().required("Firstname Is Required"),
