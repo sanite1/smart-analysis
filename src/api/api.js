@@ -5,7 +5,7 @@ import axios from "axios";
 
 export default axios.create({
     // baseURL: "http://localhost:5000/",
-    baseURL: process.env.REACT_APP_BACKEND_URL,
+    baseURL: "https://smart-ana-backend-production.up.railway.app",
     // withCredentials: true,
     credentials:"include"    
 })
