@@ -218,6 +218,7 @@ const Login = () => {
                                 marginTop: 6,
                                 fontWeight: 600,
                                 fontFamily: "monospace",
+                                fontSize: "30px",
                             }}
                         >
                             Sign up to Smart Analysis
