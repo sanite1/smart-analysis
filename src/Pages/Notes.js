@@ -80,9 +80,6 @@ const Notes = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
 
     const notes = [
         {
