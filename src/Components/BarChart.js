@@ -6,6 +6,7 @@ import { Chart as ChartJS } from "chart.js/auto"
 
 const BarChart = ({chartData, axis, ratio}) => {
 
+    console.log(useSlotProps, ChartJS);
     const options ={
         width: 200,  // Increase chart width
         height: 600,  // Increase chart height

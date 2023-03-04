@@ -1,8 +1,5 @@
 import Box from "@mui/material/Box"
-import { Avatar, Button, Grid, Step, StepContent, StepLabel, Stepper, Typography, } from "@mui/material";
-// import { Fragment, useState } from "react";
-
-import PartyCards from "../Components/PartyCards";
+import { Button, Grid, Step, StepContent, StepLabel, Stepper, Typography, } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const Styles = () => {

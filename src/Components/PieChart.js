@@ -5,6 +5,7 @@ import { Chart as ChartJS } from "chart.js/auto"
 
 
 const PieChart = ({chartData}) => {
+    console.log(useSlotProps, ChartJS);
     return (
         <Box>
             <Pie data={chartData}  />
